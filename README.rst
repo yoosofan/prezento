@@ -51,15 +51,21 @@ Assets Requirement
 
 The generated HTML slides require the following assets:
 
-* ``assets/simple.css``
-* ``assets/b6plus.js``
+* ``assets/style.css``: b6plus style or you own style
+* ``assets/b6plus.js``: b6plus javasrcript library for on screen presentation
 
 **Important**: After generating HTML files, you must have an ``assets/`` folder next to them containing these two files.
 
 These assets are taken from the `b6plus <https://github.com/ryanhaviland/b6plus>`_ project. You can update them whenever a newer version is released.
 
+You can download them from `my slides <https://github.com/yoosofan/slide/tree/main/assets>`_ too.
+
 Installation
 ============
+
+.. code:: sh
+
+    pip install prezento
 
 From source (recommended during early development):
 
@@ -129,7 +135,7 @@ You are free to use, modify, and distribute this software under the terms of GPL
 Acknowledgments
 ===============
 
-* Inspired by `Hovercraft <https://github.com/regebro/hovercraft>`_ and the original `prezentprogramo`
+* Inspired by `Hovercraft <https://github.com/regebro/hovercraft>`_ and the original `prezentprogramo <https://github.com/yoosofan/prezentprogramo>`_
 * Uses `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_ for presentation mode. https://www.w3.org/Talks/Tools/b6plus/slides.zip
 * Built on top of `docutils <https://docutils.sourceforge.io/>`_
 
