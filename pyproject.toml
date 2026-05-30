@@ -1,0 +1,49 @@
+[project]
+name = "prezento"
+version = "1.0"
+authors = [
+  { name="Ahmad Yoosofan", email="yoosofan@gmx.com" },
+]
+description = "Another text based (rst) presentation tool"
+
+readme = "README.rst"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE.txt"]
+
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+    "Topic :: Text Processing",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+keywords = ["presentations", "restructuredtext", "prezento", ]
+
+dependencies = [
+    "docutils >= 0.21",
+    "pygments >= 2.0",
+    "graphviz >= 0.20",
+]
+[project.urls]
+Homepage = "https://github.com/yoosofan/prezento"
+Issues = "https://github.com/yoosofan/prezento/issues"
+Source = "https://github.com/yoosofan/prezento"
+
+[project.scripts]
+prezento = "prezento.main:main"
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["prezento*"]
