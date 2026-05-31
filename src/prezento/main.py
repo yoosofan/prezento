@@ -456,13 +456,13 @@ def main():
     base = os.path.splitext(args.input_file)[0]
 
     # Standard
-    out = args.output or (base + '.html')
+    out = args.output or (base + 'concise4pdf.html')
     with open(out, 'w', encoding='utf-8') as f:
         f.write(publish_to_html(source).decode('utf-8'))
     print(f'Written: {out}')
 
     if not args.no_substep:
-        sub = base + '.substep.pdf.html'
+        sub = base + '.substep4pdf.html'
         with open(sub, 'w', encoding='utf-8') as f:
             f.write(publish_to_html(source, 'substep').decode('utf-8'))
         print(f'Written: {sub}')
