@@ -456,7 +456,7 @@ def main():
     base = os.path.splitext(args.input_file)[0]
 
     # Standard
-    out = args.output or (base + 'concise4pdf.html')
+    out = args.output or (base + '.concise4pdf.html')
     with open(out, 'w', encoding='utf-8') as f:
         f.write(publish_to_html(source).decode('utf-8'))
     print(f'Written: {out}')
