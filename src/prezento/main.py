@@ -286,7 +286,7 @@ _CSS_B6PLUS = (
 )
 
 _B6PLUS_JS_URL = 'assets/b6plus.js'
-_SIMPLE_CSS_URL = 'assets/style.css'
+#_SIMPLE_CSS_URL = 'assets/style.css'
 
 
 # ── Translators ──────────────────────────────────────────────────────────────
@@ -376,7 +376,7 @@ class PresentationSlidoTranslator(SlidoTranslator):
             self.head.append(f'<title>{cfg["title"]}</title>')
 
         # 1. b6plus framework CSS first
-        self.head.append(f'<link rel="stylesheet" href="{_SIMPLE_CSS_URL}" />')
+        #self.head.append(f'<link rel="stylesheet" href="{_SIMPLE_CSS_URL}" />')
 
         # 2. User CSS (can override b6plus)
         if 'css' in cfg:
