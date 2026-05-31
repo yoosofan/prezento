@@ -4,7 +4,7 @@ prezento — Modern RST Slide Generator
 
 **prezento** is a powerful, offline-first slide generator that converts reStructuredText (RST) files into beautiful, interactive HTML presentations.
 
-It is a complete rewrite of `prezentprogramo` (a former fork of Hovercraft) with modern architecture, improved substep handling, and a switch from impress.js to **b6plus**.
+It is a complete rewrite of `prezentprogramo` (a former fork of Hovercraft) with modern architecture, improved substep handling, and a switch from impress.js to `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_.
 
 .. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
    :target: LICENSE
@@ -29,9 +29,9 @@ Features
 Why prezento?
 =============
 
-The original `prezentprogramo` was heavily tied to impress.js and had complex indentation requirements. After years of use, I decided to rewrite it from scratch with the following goals:
+The original `prezentprogramo` was heavily tied to impress.js and had complex structure. After years of use, I decided to rewrite it from scratch with the following goals:
 
-* Better substep semantics (especially for lists and nested content)
+* Better substep semantics for lecture note substeps(Showing content of a page gradually)
 * Modern docutils usage (no deprecated APIs)
 * Cleaner code architecture
 * Switch to **b6plus** — a lightweight and actively maintained presentation library
@@ -49,14 +49,13 @@ https://github.com/yoosofan/slide
 Assets Requirement
 ==================
 
-The generated HTML slides require the following assets:
+The generated HTML slides require the following asset:
 
-* ``assets/style.css``: b6plus style or you own style
 * ``assets/b6plus.js``: b6plus javasrcript library for on screen presentation
 
-**Important**: After generating HTML files, you must have an ``assets/`` folder next to them containing these two files.
+**Important**: After generating HTML files, you must have an ``assets/`` folder next to them containing this file.
 
-These assets are taken from the `b6plus <https://github.com/ryanhaviland/b6plus>`_ project. You can update them whenever a newer version is released.
+These assets are taken from the `b6plus <https://www.w3.org/Talks/Tools/b6plus/slides.zip>`_ project. You can update them whenever a newer version is released.
 
 You can download them from `my slides <https://github.com/yoosofan/slide/tree/main/assets>`_ too.
 
@@ -86,8 +85,8 @@ Basic usage:
 
 This will generate three output files in the same directory:
 
-* ``your_slides.html`` — Standard version
-* ``your_slides.substep.pdf.html`` — Step-by-step version (good for printing)
+* ``your_slides.concise4pdf.html`` — Standard version (good for printing)
+* ``your_slides.substep4pdf.html`` — Step-by-step version
 * ``your_slides.presentation.html`` — b6plus interactive version
 
 Options:
@@ -109,7 +108,7 @@ Project Structure (Development)
     │       ├── __init__.py
     │       └── main.py
     ├── docs/
-    │   └── dev-history/
+    │   └── tools/
     └── tests/
 
 Contributing
