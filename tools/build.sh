@@ -1,6 +1,6 @@
 #!/bin/bash
 function common_tasks1(){
-    source ./clean.sh
+    bash ./tools/clean.sh
     rsync -av --delete ~/research/projects/prezento/ ~/temp/prz/
     #uv tool uninstall --all
     #uv cache clean
@@ -55,11 +55,5 @@ uv tool install twine
 
 twine check --strict dist/*
 twine upload dist/*
-
-### Old
-
-uv tool install ini2toml[full]
-ini2toml --help
-ini2toml -o setup.toml setup.cfg
 
 COMMENT11

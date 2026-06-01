@@ -1,6 +1,6 @@
 [project]
 name = "prezento"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
   { name="Ahmad Yoosofan", email="yoosofan@gmx.com" },
 ]
@@ -16,7 +16,6 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Education",
     "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
@@ -42,7 +41,7 @@ dependencies = [
 Homepage = "https://github.com/yoosofan/prezento"
 Issues = "https://github.com/yoosofan/prezento/issues"
 Source = "https://github.com/yoosofan/prezento"
-Changelog   = "https://github.com/yoosofan/prezento/blob/main/CHANGELOG.rst"
+Changelog   = "https://github.com/yoosofan/prezento/blob/main/docs/CHANGELOG.rst"
 
 [project.scripts]
 prezento = "prezento.main:main"
