@@ -285,8 +285,6 @@ _CSS_B6PLUS = (
     '</style>'
 )
 
-_B6PLUS_JS_URL = 'assets/b6plus.js'
-#_SIMPLE_CSS_URL = 'assets/style.css'
 
 
 # ── Translators ──────────────────────────────────────────────────────────────
@@ -375,6 +373,9 @@ class PresentationSlidoTranslator(SlidoTranslator):
         if 'title' in cfg:
             self.head.append(f'<title>{cfg["title"]}</title>')
 
+        _B6PLUS_JS_URL = 'assets/b6plus.js'
+        #_SIMPLE_CSS_URL = 'assets/style.css'
+
         # 1. b6plus framework CSS first
         #self.head.append(f'<link rel="stylesheet" href="{_SIMPLE_CSS_URL}" />')
 
@@ -443,10 +444,10 @@ def publish_to_html(source_rst: str, output_type: str = 'standard') -> bytes:
     return publish_from_doctree(doctree, writer=writer)
 
 def main():
-    parser = argparse.ArgumentParser(description='prezentprogramo v2')
+    parser = argparse.ArgumentParser(description='prezent v1')
     parser.add_argument('input_file')
     parser.add_argument('-o', '--output')
-    parser.add_argument('--no-substep', action='store_true')
+    parser.add_argument('-s', '--substep')
     parser.add_argument('--no-presentation', action='store_true')
     args = parser.parse_args()
 
@@ -461,7 +462,7 @@ def main():
         f.write(publish_to_html(source).decode('utf-8'))
     print(f'Written: {out}')
 
-    if not args.no_substep:
+    if args.substep:
         sub = base + '.substep4pdf.html'
         with open(sub, 'w', encoding='utf-8') as f:
             f.write(publish_to_html(source, 'substep').decode('utf-8'))

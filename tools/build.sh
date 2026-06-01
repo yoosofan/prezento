@@ -1,10 +1,9 @@
 #!/bin/bash
 function common_tasks1(){
+    source ./clean.sh
     rsync -av --delete ~/research/projects/prezento/ ~/temp/prz/
-
     #uv tool uninstall --all
     #uv cache clean
-
     uv tool uninstall prezento
     uv cache clean prezento
     uv tool install ~/temp/prz/
@@ -12,7 +11,6 @@ function common_tasks1(){
 
 function run22(){
     common_tasks1
-
     cd ~/research/projects/slide/
     prezento os.mem.rst
 }

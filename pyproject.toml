@@ -12,30 +12,37 @@ license-files = ["LICENSE.txt"]
 
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
     "Development Status :: 5 - Production/Stable",
-    "Topic :: Multimedia :: Graphics :: Presentation",
-    "Topic :: Text Processing",
+    "Environment :: Console",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+    "Topic :: Text Processing :: Markup :: reStructuredText",
 ]
 
-keywords = ["presentations", "restructuredtext", "prezento", ]
+keywords = ["presentation", "restructuredtext", "rst", "slides", "docutils"]
+
 
 dependencies = [
     "docutils >= 0.21",
-    "pygments >= 2.0",
+    "pygments >= 2.20",
     "graphviz >= 0.20",
 ]
 [project.urls]
 Homepage = "https://github.com/yoosofan/prezento"
 Issues = "https://github.com/yoosofan/prezento/issues"
 Source = "https://github.com/yoosofan/prezento"
+Changelog   = "https://github.com/yoosofan/prezento/blob/main/CHANGELOG.rst"
 
 [project.scripts]
 prezento = "prezento.main:main"
