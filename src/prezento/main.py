@@ -447,7 +447,7 @@ def main():
     parser = argparse.ArgumentParser(description='prezent v1')
     parser.add_argument('input_file')
     parser.add_argument('-o', '--output')
-    parser.add_argument('-s', '--substep')
+    parser.add_argument('-s', '--substep', action='store_true')
     parser.add_argument('--no-presentation', action='store_true')
     args = parser.parse_args()
 

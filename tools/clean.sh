@@ -1,7 +1,5 @@
 #!/bin/bash
 
-pwd
-
 # Script: Clean hidden files/folders (except .git) and Python artifacts
 # Usage: ./cleanup_root.sh
 
