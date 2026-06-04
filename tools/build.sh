@@ -13,6 +13,7 @@ function run22(){
     common_tasks1
     cd ~/research/projects/slide/
     prezento os.mem.rst
+    prezento os.paging.rst
 }
 
 run22

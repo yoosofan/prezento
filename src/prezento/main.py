@@ -2,7 +2,6 @@
 # Uses b6plus instead of impress.js
 # Outputs: .html, .substep.pdf.html, .presentation.html
 
-# [ADDED] Imported 're' (regular expressions) to help manipulate the SVG strings natively.
 import os
 import argparse
 import textwrap
@@ -13,6 +12,9 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.core import publish_doctree, publish_from_doctree
 from docutils.writers.html5_polyglot import Writer as HTML5WriterBase, HTMLTranslator
+# [NEW] Imports for proper settings handling
+from docutils.frontend import OptionParser
+from docutils.utils import Reporter
 
 # ── Custom nodes ─────────────────────────────────────────────────────────────
 class slido_block(nodes.container):
@@ -58,7 +60,6 @@ class SlidoDirective(Directive):
         if 'id' in self.options:
             node['ids'] = [self.options['id']]
 
-        # Dedent content
         text = '\n'.join(self.content)
         dedented = textwrap.dedent(text)
         content = self.content.__class__(
@@ -70,8 +71,6 @@ class SlidoDirective(Directive):
 
 class GraphvizDirective(Directive):
     has_content = True
-    # [CHANGED] Expanded option_spec to include class, width, and height.
-    # This mirrors the built-in 'image' directive capabilities.
     option_spec = {
         'align': directives.unchanged,
         'class': directives.class_option,
@@ -82,7 +81,6 @@ class GraphvizDirective(Directive):
     def run(self):
         node = graphviz_block()
 
-        # [ADDED] Store the parsed options into the node so the HTML translator can access them.
         if 'class' in self.options:
             node['classes'] = self.options['class']
         if 'align' in self.options:
@@ -98,22 +96,16 @@ class GraphvizDirective(Directive):
             if '<svg' in svg:
                 svg = svg[svg.find('<svg'):]
 
-                # [ADDED] Graphviz hardcodes width and height into the <svg> tag in points (pt),
-                # which overrides external CSS. If the user specifies a width or height in the
-                # RST directive, we strip the Graphviz defaults and inject the user's values directly.
                 if 'width' in self.options or 'height' in self.options:
-                    # Remove the original width and height attributes using regex
                     svg = re.sub(r'(<svg[^>]*?)\s+width="[^"]+"', r'\1', svg, count=1)
                     svg = re.sub(r'(<svg[^>]*?)\s+height="[^"]+"', r'\1', svg, count=1)
 
-                    # Build the new attribute string
                     new_attrs = ""
                     if 'width' in self.options:
                         new_attrs += f' width="{self.options["width"]}"'
                     if 'height' in self.options:
                         new_attrs += f' height="{self.options["height"]}"'
 
-                    # Inject the new dimensions right after the opening '<svg'
                     svg = svg.replace('<svg', f'<svg{new_attrs}', 1)
 
             node['svg'] = svg
@@ -361,13 +353,13 @@ class SlidoTranslator(HTMLTranslator):
 
 class PresentationSlidoTranslator(SlidoTranslator):
     def __init__(self, document):
-        HTMLTranslator.__init__(self, document)
+        super().__init__(document)
         self.slide_count = 0
         self.config = getattr(document, 'presentation_config', {})
         self._progress_emitted = False
 
     def visit_document(self, node):
-        HTMLTranslator.visit_document(self, node)
+        SlidoTranslator.visit_document(self, node)
         cfg = self.config
 
         if 'title' in cfg:
@@ -418,6 +410,20 @@ class SlidoWriter(HTML5WriterBase):
         self._output_type = output_type
         self.translator_class = lambda doc: SlidoTranslator(doc, output_type=output_type)
 
+        # [FIXED] Proper docutils settings to prevent exit on missing PIL
+        # and allow :scale: / image attributes to work gracefully
+        self.settings = OptionParser(
+            components=(self,),
+            defaults={
+                'file_insertion_enabled': True,
+                'raw_enabled': True,
+                'halt_level': Reporter.ERROR_LEVEL,      # Only stop on real errors
+                'report_level': Reporter.WARNING_LEVEL,
+                'output_encoding': 'utf-8',
+                'no_file_insertion': False,
+            }
+        ).get_default_values()
+
     def translate(self):
         if self._output_type == 'substep':
             _expand_document_for_substep_pdf(self.document)
@@ -428,6 +434,19 @@ class PresentationSlidoWriter(HTML5WriterBase):
     def __init__(self):
         super().__init__()
         self.translator_class = PresentationSlidoTranslator
+
+        # [FIXED] Same robust settings for presentation output
+        self.settings = OptionParser(
+            components=(self,),
+            defaults={
+                'file_insertion_enabled': True,
+                'raw_enabled': True,
+                'halt_level': Reporter.ERROR_LEVEL,
+                'report_level': Reporter.WARNING_LEVEL,
+                'output_encoding': 'utf-8',
+                'no_file_insertion': False,
+            }
+        ).get_default_values()
 
     def translate(self):
         _b6_transform(self.document)
@@ -441,7 +460,8 @@ def publish_to_html(source_rst: str, output_type: str = 'standard') -> bytes:
         writer = PresentationSlidoWriter()
     else:
         writer = SlidoWriter(output_type=output_type)
-    return publish_from_doctree(doctree, writer=writer)
+    return publish_from_doctree(doctree, writer=writer, settings=writer.settings)
+
 
 def main():
     parser = argparse.ArgumentParser(description='prezent v1')
@@ -456,7 +476,6 @@ def main():
 
     base = os.path.splitext(args.input_file)[0]
 
-    # Standard
     out = args.output or (base + '.concise4pdf.html')
     with open(out, 'w', encoding='utf-8') as f:
         f.write(publish_to_html(source).decode('utf-8'))
@@ -475,6 +494,5 @@ def main():
         print(f'Written: {pres}')
 
 
-# ── CLI ──────────────────────────────────────────────────────────────────────
 if __name__ == '__main__':
     main()

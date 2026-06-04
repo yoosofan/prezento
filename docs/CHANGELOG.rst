@@ -18,6 +18,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Removed**
 
+v1.0.3 (2026-06-04)
+===================
+
+**Added**
+
+* asstes folder added to the tools folder of the repository for reference
+* `slido_ls.py` LSP server add to help Kate/Geany IDE to show symbols of `slido`
+
+**Fixed**
+
+* scale attribute for image directive is added
+* pillow is added to the package dependencies
+
+**Removed**
+
+* tools/rst2tags4geany.py
 
 v1.0.1 (2026-05-31)
 ===================

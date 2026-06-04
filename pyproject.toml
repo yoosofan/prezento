@@ -1,6 +1,6 @@
 [project]
 name = "prezento"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
   { name="Ahmad Yoosofan", email="yoosofan@gmx.com" },
 ]
@@ -36,6 +36,7 @@ dependencies = [
     "docutils >= 0.21",
     "pygments >= 2.20",
     "graphviz >= 0.20",
+    "pillow   >= 12.1",
 ]
 [project.urls]
 Homepage = "https://github.com/yoosofan/prezento"
