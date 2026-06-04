@@ -112,10 +112,7 @@ Project Structure (Development)
     └── tools/
         ├── slido_ls.py
         ├── build.sh
-        ├── clean.sh
-        └── assets
-            ├── b6plus.js
-            └── style.css
+        └── clean.sh
 
 Contributing
 ============
