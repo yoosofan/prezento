@@ -94,8 +94,8 @@ Options:
 .. code-block:: bash
 
     prezento input.rst -o output.html
-    prezento input.rst --no-substep          # Skip substep PDF version
-    prezento input.rst --no-presentation     # Skip b6plus version
+    prezento input.rst -s               # Skip substep PDF version
+    prezento input.rst -np              # Skip b6plus version for screen presentation
 
 Project Structure (Development)
 ===============================
@@ -108,8 +108,14 @@ Project Structure (Development)
     │       ├── __init__.py
     │       └── main.py
     ├── docs/
-    │   └── tools/
-    └── tests/
+    │   └── CHANGELOG.rst
+    └── tools/
+        ├── slido_ls.py
+        ├── build.sh
+        ├── clean.sh
+        └── assets
+            ├── b6plus.js
+            └── style.css
 
 Contributing
 ============
