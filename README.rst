@@ -110,7 +110,7 @@ Project Structure (Development)
     ├── docs/
     │   └── CHANGELOG.rst
     └── tools/
-        ├── slido_ls.py
+        ├── slido_ls.py      : A specialized SLP server
         ├── build.sh
         └── clean.sh
 

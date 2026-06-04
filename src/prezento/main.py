@@ -468,7 +468,7 @@ def main():
     parser.add_argument('input_file')
     parser.add_argument('-o', '--output')
     parser.add_argument('-s', '--substep', action='store_true')
-    parser.add_argument('--no-presentation', action='store_true')
+    parser.add_argument('-np', '--no-presentation', action='store_true')
     args = parser.parse_args()
 
     with open(args.input_file, 'r', encoding='utf-8') as f:
