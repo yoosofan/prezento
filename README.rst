@@ -93,8 +93,8 @@ Options:
 .. code-block:: bash
 
     prezento input.rst -o output.html
-    prezento input.rst -s               # Generate ``your_slides.substep4pdf.html`` — Step-by-step version
-    prezento input.rst -np              # Skip b6plus version for screen presentation
+    prezento input.rst -s  # Generate input.substep4pdf.html — Step-by-step version
+    prezento input.rst -np # Skip b6plus version for screen presentation
 
 Project Structure (Development)
 ===============================
