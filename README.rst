@@ -83,10 +83,9 @@ Basic usage:
 
     prezento your_slides.rst
 
-This will generate three output files in the same directory:
+This will generate two output files in the same directory:
 
 * ``your_slides.concise4pdf.html`` — Standard version (good for printing)
-* ``your_slides.substep4pdf.html`` — Step-by-step version
 * ``your_slides.presentation.html`` — b6plus interactive version
 
 Options:
@@ -94,7 +93,7 @@ Options:
 .. code-block:: bash
 
     prezento input.rst -o output.html
-    prezento input.rst -s               # Skip substep PDF version
+    prezento input.rst -s               # Generate ``your_slides.substep4pdf.html`` — Step-by-step version
     prezento input.rst -np              # Skip b6plus version for screen presentation
 
 Project Structure (Development)
@@ -110,7 +109,8 @@ Project Structure (Development)
     ├── docs/
     │   └── CHANGELOG.rst
     └── tools/
-        ├── slido_ls.py      : A specialized SLP server
+        ├── readme.rst
+        ├── slido_ls.py
         ├── build.sh
         └── clean.sh
 
