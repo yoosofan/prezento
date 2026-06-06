@@ -31,7 +31,7 @@ Deployment and Editor Integration
 2. Configure your editor or IDE to invoke this script as an LSP server for the ``rst`` file type. Below are setup examples for popular editors.
 
 .. important::
-   In the configuration examples below, the path ``/home/absolute/path/to/here/prezento/tools/slido_ls.py`` is a placeholder. You must replace it with the actual, absolute absolute path to where the ``slido_ls.py`` file is located on your local machine.
+   In the configuration examples below, the path ``/home/absolute/path/to/here/prezento/tools/slido_ls.py`` is a placeholder. You must replace it with the actual, absolute path to where the ``slido_ls.py`` file is located on your local machine.
 
 Kate Editor
 ````````````````
