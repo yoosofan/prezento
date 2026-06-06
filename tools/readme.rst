@@ -27,6 +27,8 @@ Deployment and Editor Integration
 
 2. Configure your editor or IDE to invoke this script as an LSP server for the ``rst`` file type. Below are setup examples for popular editors.
 
+.. important::
+   In the configuration examples below, the path ``/home/absolute/path/to/here/prezento/tools/slido_ls.py`` is a placeholder. You must replace it with the actual, absolute absolute path to where the ``slido_ls.py`` file is located on your local machine.
 
 Kate Editor
 ````````````````
@@ -68,6 +70,25 @@ If you are using Neovim's built-in LSP client, you can spawn the server manually
     })
 
 The primary scope of this tool is focused on generating a clean, accurate symbol tree navigation pane for individual slide elements during active editing sessions.
+
+Visual Studio Code (via LSP Config)
+```````````````````````````````````
+
+VS Code typically requires compiling a standalone extension framework to execute custom binaries. You can bypass this by running your local server through the third-party `LSP Config <https://marketplace.visualstudio.com/items?itemName=pepebecker.vscode-lsp-config>`_ extension.
+
+Once installed, append this server block profile to your global ``settings.json`` file:
+
+.. code:: json
+
+    {
+        "lsp-config.servers": {
+            "prezento-slido": {
+                "command": ["/home/absolute/path/to/here/prezento/tools/slido_ls.py"],
+                "filetypes": ["restructuredtext"]
+            }
+        }
+    }
+
 
 Development Background & Acknowledgments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
