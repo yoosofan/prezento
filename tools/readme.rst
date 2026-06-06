@@ -74,10 +74,36 @@ If you are using Neovim's built-in LSP client, you can spawn the server manually
 
 The primary scope of this tool is focused on generating a clean, accurate symbol tree navigation pane for individual slide elements during active editing sessions.
 
+Geany IDE (via geany-lsp)
+`````````````````````````
+
+Geany is a lightweight, high-performance IDE that supports the Language Server Protocol through the official `Geany Plugins <https://geany.org>`_ ecosystem using the ``geany-lsp`` module.
+
+Unlike other modern text editors that rely heavily on JSON configurations, Geany parses its custom language client parameters using a standardized INI configuration syntax (``lsp.conf``).
+
+To integrate the specialized ``slido_ls.py`` server into Geany for processing your presentation files, follow these structural integration steps:
+
+1. **Activate the Client Engine**: Open Geany and navigate to **Tools** > **Plugin Manager**. Scroll down, check the box next to **LSP Client**, and click **OK** to load the plugin infrastructure.
+2. **Access Configuration Pathways**: Open your personal server rules spreadsheet by clicking on **Tools** > **LSP Client** > **User Configuration**. This will open a text workspace where you can safely declare user-defined binaries.
+3. **Insert the Execution Hook**: Append the following block to the configuration space. Ensure you use the exact lowercase identifier header ``[restructuredtext]`` so Geany correctly matches the rule to your active file type layout:
+
+   .. code-block:: ini
+
+       [restructuredtext]
+       cmd=/home/absolute/path/to/here/prezento/tools/slido_ls.py
+
+4. **Initialize and Synchronize**: Save your changes. To force Geany to spawn the server instance without terminating your current workspace windows, navigate to **Tools** > **LSP Client** > **Restart All Servers**.
+
+Once established, opening any ``.rst`` script containing a active slide configuration will automatically populate Geany's localized **Symbols** tracking tab in the left-hand sidebar tree view, letting you track slide progression counts visually while editing text.
+
 Visual Studio Code (via LSP Config)
 ```````````````````````````````````
 
 VS Code typically requires compiling a standalone extension framework to execute custom binaries. You can bypass this by running your local server through the third-party `LSP Config <https://marketplace.visualstudio.com/items?itemName=pepebecker.vscode-lsp-config>`_ extension.
+
+.. code:: sh
+
+    code --install-extension pepebecker.vscode-lsp-config
 
 Once installed, append this server block profile to your global ``settings.json`` file:
 
