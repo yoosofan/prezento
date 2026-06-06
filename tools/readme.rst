@@ -5,7 +5,7 @@ Prezento Developer Utilities
 This directory contains complementary tools designed to enhance productivity when developing or working with `prezento`. To keep the core package lightweight and minimize external dependencies, these optional scripts are maintained separately here rather than being bundled into the main distribution.
 
 .. contents:: Table of Contents
-   :depth: 3
+   :depth: 4
 
 Scripts and Files
 =================
