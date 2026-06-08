@@ -1,6 +1,6 @@
 # prezento – Modern RST → HTML slide generator
 # Uses b6plus instead of impress.js
-# Outputs: .html, .substep.pdf.html, .presentation.html
+# Outputs: .html, .step4pdf.html, .presentation.html
 
 import os
 import argparse
@@ -12,7 +12,6 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.core import publish_doctree, publish_from_doctree
 from docutils.writers.html5_polyglot import Writer as HTML5WriterBase, HTMLTranslator
-# [NEW] Imports for proper settings handling
 from docutils.frontend import OptionParser
 from docutils.utils import Reporter
 
@@ -49,6 +48,7 @@ class SlidoDirective(Directive):
     option_spec = {
         'class': directives.class_option,
         'id':    directives.unchanged,
+        'step':  directives.flag,
     }
 
     def run(self):
@@ -59,7 +59,10 @@ class SlidoDirective(Directive):
             node['classes'] = self.options['class']
         if 'id' in self.options:
             node['ids'] = [self.options['id']]
+        if 'step' in self.options:
+            node['classes'] = node.get('classes', []) + ['step']
 
+        # Dedent content
         text = '\n'.join(self.content)
         dedented = textwrap.dedent(text)
         content = self.content.__class__(
@@ -75,26 +78,29 @@ class GraphvizDirective(Directive):
         'align': directives.unchanged,
         'class': directives.class_option,
         'width': directives.unchanged,
-        'height': directives.unchanged
+        'height': directives.unchanged,
+        'scale': directives.unchanged,
+        'alt': directives.unchanged,
+        'name': directives.unchanged,
+        'target': directives.unchanged
     }
 
     def run(self):
         node = graphviz_block()
 
-        if 'class' in self.options:
-            node['classes'] = self.options['class']
-        if 'align' in self.options:
-            node['align'] = self.options['align']
-        if 'width' in self.options:
-            node['width'] = self.options['width']
-        if 'height' in self.options:
-            node['height'] = self.options['height']
+        if 'class' in self.options: node['classes'] = self.options['class']
+        if 'align' in self.options: node['align'] = self.options['align']
+        if 'width' in self.options: node['width'] = self.options['width']
+        if 'height' in self.options: node['height'] = self.options['height']
+        if 'scale' in self.options: node['scale'] = self.options['scale']
 
         dot_code = '\n'.join(self.content)
         try:
             svg = graphviz.Source(dot_code).pipe(format='svg').decode('utf-8')
             if '<svg' in svg:
                 svg = svg[svg.find('<svg'):]
+
+                svg = re.sub(r'(class="[^"]*?\b)step(\b[^"]*")', r'\1incremental\2', svg)
 
                 if 'width' in self.options or 'height' in self.options:
                     svg = re.sub(r'(<svg[^>]*?)\s+width="[^"]+"', r'\1', svg, count=1)
@@ -118,9 +124,8 @@ directives.register_directive('prezento', PrezentoDirective)
 directives.register_directive('slido', SlidoDirective)
 directives.register_directive('yographviz', GraphvizDirective)
 
-# ── Substep Helpers ──────────────────────────────────────────────────────────
-
-_SUBSTEP_CONTAINER_TYPES = (
+# ── Step Helpers ─────────────────────────────────────────────────────────────
+_STEP_CONTAINER_TYPES = (
     slido_block,
     nodes.container,
     nodes.block_quote,
@@ -129,35 +134,33 @@ _SUBSTEP_CONTAINER_TYPES = (
     nodes.definition_list,
 )
 
-
-def _is_substep_container(node):
+def _is_step_container(node):
     return (
-        isinstance(node, _SUBSTEP_CONTAINER_TYPES)
+        isinstance(node, _STEP_CONTAINER_TYPES)
         and isinstance(node, nodes.Element)
-        and 'substep' in node.get('classes', [])
+        and 'step' in node.get('classes', [])
     )
 
-
-def _is_atomic_substep(node):
+def _is_atomic_step(node):
     return (
         isinstance(node, nodes.Element)
-        and 'substep' in node.get('classes', [])
-        and not _is_substep_container(node)
+        and 'step' in node.get('classes', [])
+        and not _is_step_container(node)
     )
 
-# ── Substep PDF Expansion ───────────────────────────────────────────────────
+# ── Step PDF Expansion ──────────────────────────────────────────────────────
 def _assign_reveal_indices(root):
     counter = [0]
 
     def walk(node):
-        if _is_substep_container(node):
+        if _is_step_container(node):
             for child in node.children:
                 if isinstance(child, nodes.Text):
                     continue
                 counter[0] += 1
                 child['_reveal_index'] = counter[0]
                 walk(child)
-        elif _is_atomic_substep(node):
+        elif _is_atomic_step(node):
             counter[0] += 1
             node['_reveal_index'] = counter[0]
         else:
@@ -174,9 +177,9 @@ def _apply_step_visibility(root, step):
         ri = node.get('_reveal_index', 0)
         if ri == 0:
             continue
-        classes = [c for c in node.get('classes', []) if c not in ('substep', 'substep-hidden')]
+        classes = [c for c in node.get('classes', []) if c not in ('step', 'step-hidden')]
         if ri > step:
-            classes.append('substep-hidden')
+            classes.append('step-hidden')
         node['classes'] = classes
 
 
@@ -204,8 +207,7 @@ def _expand_slide(slide, slide_number):
         sections.append(sec)
     return sections
 
-
-def _expand_document_for_substep_pdf(document):
+def _expand_document_for_step_pdf(document):
     new_children = []
     slide_num = 0
     for node in list(document.children):
@@ -221,15 +223,15 @@ def _expand_document_for_substep_pdf(document):
 
 # ── b6plus Transformation ───────────────────────────────────────────────────
 def _b6_transform(document):
-    """Convert substep semantics to b6plus `incremental` / `next` classes."""
+    """Convert step semantics to b6plus `incremental` classes."""
 
-    # Phase 1: Handle slido blocks with substep
+    # Phase 1: Handle slido blocks with step
     for slide in document.findall(slido_block):
         classes = slide.get('classes', [])
-        if 'substep' not in classes:
+        if 'step' not in classes:
             continue
 
-        slide['classes'] = [c for c in classes if c != 'substep']
+        slide['classes'] = [c for c in classes if c != 'step']
 
         for child in slide.children:
             if not isinstance(child, nodes.Element):
@@ -237,23 +239,19 @@ def _b6_transform(document):
             if isinstance(child, (nodes.title, nodes.colspec, nodes.thead)):
                 continue
             child_classes = list(child.get('classes', []))
-            if 'next' not in child_classes:
-                child['classes'] = child_classes + ['next']
+            if 'incremental' not in child_classes:
+                child['classes'] = child_classes + ['incremental']
 
-    # Phase 2: Other substep containers and atomic elements
+    # Phase 2: Other step containers and atomic elements
     for node in document.findall(nodes.Element):
         classes = node.get('classes', [])
-        if 'substep' not in classes:
+        if 'step' not in classes:
             continue
 
-        clean = [c for c in classes if c != 'substep']
+        clean = [c for c in classes if c != 'step']
 
-        if _is_substep_container(node):
-            if 'incremental' not in clean:
-                clean.append('incremental')
-        else:
-            if 'next' not in clean:
-                clean.append('next')
+        if 'incremental' not in clean:
+            clean.append('incremental')
 
         node['classes'] = clean
 
@@ -265,7 +263,8 @@ _CSS_FULLWIDTH = (
     '}</style>'
 )
 
-_CSS_SUBSTEP_HIDDEN = '<style>.substep-hidden{opacity:0;}</style>'
+_CSS_STEP_HIDDEN = '<style>.step-hidden{opacity:0;}</style>'
+
 
 # ── Translators ──────────────────────────────────────────────────────────────
 class SlidoTranslator(HTMLTranslator):
@@ -277,19 +276,24 @@ class SlidoTranslator(HTMLTranslator):
 
     def visit_document(self, node):
         super().visit_document(node)
+
+        # [ADDED] Strip out the default <title>&lt;string&gt;</title> that docutils
+        # automatically generates when parsing text buffers, leaving only our custom title.
+        self.head = [tag for tag in self.head if not tag.strip().startswith('<title')]
+
         self.head.append(_CSS_FULLWIDTH)
-        if self.output_type == 'substep':
-            self.head.append(_CSS_SUBSTEP_HIDDEN)
+        if self.output_type == 'step':
+            self.head.append(_CSS_STEP_HIDDEN)
 
         cfg = self.config
         if 'title' in cfg:
-            self.head.append(f'<title>{cfg["title"]}</title>')
+            self.head.append(f'<title>{cfg["title"]}</title>\n')
         if 'css' in cfg:
             for css in cfg['css'].split(','):
-                self.head.append(f'<link rel="stylesheet" href="{css.strip()}" type="text/css" />')
+                self.head.append(f'<link rel="stylesheet" href="{css.strip()}" type="text/css" />\n')
         if 'js' in cfg:
             for js in cfg['js'].split(','):
-                self.head.append(f'<script src="{js.strip()}"></script>')
+                self.head.append(f'<script src="{js.strip()}"></script>\n')
 
     def depart_document(self, node):
         super().depart_document(node)
@@ -302,7 +306,7 @@ class SlidoTranslator(HTMLTranslator):
         else:
             self.slide_count += 1
 
-        extra = [c for c in node.get('classes', []) if c not in ('substep', 'substep-hidden')]
+        extra = [c for c in node.get('classes', []) if c not in ('step', 'step-hidden')]
         class_str = ' '.join(['slide'] + extra)
         id_attr = f' id="{node["ids"][0]}"' if node.get('ids') else ''
         self.body.append(f'<section class="{class_str}"{id_attr}>\n')
@@ -312,14 +316,15 @@ class SlidoTranslator(HTMLTranslator):
     def depart_slido_block(self, node):
         self.body.append(f'<div class="slide-number">{self.slide_count}</div></section>\n')
 
+    # [REMOVED] The overridden visit_image and depart_image methods have been completely
+    # removed. Because the 'pillow' library is now required, docutils processes the :scale:
+    # attribute natively during build time, removing the need for CSS scaling hacks.
+
     def visit_graphviz_block(self, node):
-        # [CHANGED] Calculate container styles dynamically based on the options passed.
         align = node.get('align', 'center')
 
-        # [ADDED] Merge the default container class with any user-supplied classes
         classes = ['graphviz-container'] + node.get('classes', [])
 
-        # [ADDED] Build inline styling to handle the alignment
         styles = []
         if align == 'center':
             styles.append('margin: 0 auto;')
@@ -331,10 +336,22 @@ class SlidoTranslator(HTMLTranslator):
             styles.append('margin-left: auto;')
             styles.append('text-align: right;')
 
+        if 'scale' in node:
+            try:
+                scale_val = float(node['scale']) / 100.0
+                styles.append(f'transform: scale({scale_val});')
+                if align == 'center':
+                    styles.append('transform-origin: top center;')
+                elif align == 'right':
+                    styles.append('transform-origin: top right;')
+                else:
+                    styles.append('transform-origin: top left;')
+            except ValueError:
+                pass
+
         class_str = ' '.join(classes)
         style_str = ' '.join(styles)
 
-        # [CHANGED] Output the customized div with the dynamic styles and classes
         self.body.append(f'<div class="{class_str}" style="{style_str}">\n{node.get("svg", "")}\n</div>\n')
         raise nodes.SkipNode
 
@@ -350,41 +367,35 @@ class PresentationSlidoTranslator(SlidoTranslator):
         SlidoTranslator.visit_document(self, node)
         cfg = self.config
 
-        if 'title' in cfg:
-            self.head.append(f'<title>{cfg["title"]}</title>')
+        # [REMOVED] A duplicate code block for appending `<title>{cfg["title"]}</title>`
+        # was removed here because `SlidoTranslator.visit_document(self, node)` already
+        # applies the correct title. This prevents 2 identical titles from appearing.
 
         _B6PLUS_JS_URL = 'assets/b6plus.js'
-        #_SIMPLE_CSS_URL = 'assets/style.css'
 
-        # 1. b6plus framework CSS first
-        #self.head.append(f'<link rel="stylesheet" href="{_SIMPLE_CSS_URL}" />')
-
-        # 2. User CSS (can override b6plus)
-        if 'css' in cfg:
-            for css in cfg['css'].split(','):
-                self.head.append(
-                    f'<link rel="stylesheet" href="{css.strip()}" type="text/css" />'
-                )
         _CSS_B6PLUS = (
             '<style>'
             'body.full .next:not(.active):not(.visited),'
             'body.full .incremental>*:not(.active):not(.visited),'
             'body.full .overlay>*:not(.active):not(.visited){visibility:hidden}'
-            #'body.full .slide-number{display:none}'
             'body.full section.slide{padding-bottom:1rem;break-after:auto;background-color:#ffffff;}'
-            '</style>'
+            '</style>\n'
         )
+
+        if 'css' in cfg:
+            for css in cfg['css'].split(','):
+                self.head.append(
+                    f'<link rel="stylesheet" href="{css.strip()}" type="text/css" />\n'
+                )
 
         self.head.append(_CSS_FULLWIDTH)
         self.head.append(_CSS_B6PLUS)
 
-        # 3. b6plus script
-        self.head.append(f'<script src="{_B6PLUS_JS_URL}"></script>')
+        self.head.append(f'<script src="{_B6PLUS_JS_URL}"></script>\n')
 
-        # 4. Additional user JS
         if 'js' in cfg:
             for js in cfg['js'].split(','):
-                self.head.append(f'<script src="{js.strip()}"></script>')
+                self.head.append(f'<script src="{js.strip()}"></script>\n')
 
         self.body.append(
             '<script>\n'
@@ -407,23 +418,20 @@ class SlidoWriter(HTML5WriterBase):
         self._output_type = output_type
         self.translator_class = lambda doc: SlidoTranslator(doc, output_type=output_type)
 
-        # [FIXED] Proper docutils settings to prevent exit on missing PIL
-        # and allow :scale: / image attributes to work gracefully
         self.settings = OptionParser(
             components=(self,),
             defaults={
                 'file_insertion_enabled': True,
                 'raw_enabled': True,
-                'halt_level': Reporter.ERROR_LEVEL,      # Only stop on real errors
+                'halt_level': Reporter.WARNING_LEVEL,
                 'report_level': Reporter.WARNING_LEVEL,
                 'output_encoding': 'utf-8',
-                'no_file_insertion': False,
             }
         ).get_default_values()
 
     def translate(self):
-        if self._output_type == 'substep':
-            _expand_document_for_substep_pdf(self.document)
+        if self._output_type == 'step':
+            _expand_document_for_step_pdf(self.document)
         super().translate()
 
 
@@ -432,16 +440,14 @@ class PresentationSlidoWriter(HTML5WriterBase):
         super().__init__()
         self.translator_class = PresentationSlidoTranslator
 
-        # [FIXED] Same robust settings for presentation output
         self.settings = OptionParser(
             components=(self,),
             defaults={
                 'file_insertion_enabled': True,
                 'raw_enabled': True,
-                'halt_level': Reporter.ERROR_LEVEL,
+                'halt_level': Reporter.WARNING_LEVEL,
                 'report_level': Reporter.WARNING_LEVEL,
                 'output_encoding': 'utf-8',
-                'no_file_insertion': False,
             }
         ).get_default_values()
 
@@ -464,7 +470,7 @@ def main():
     parser = argparse.ArgumentParser(description='prezent v1')
     parser.add_argument('input_file')
     parser.add_argument('-o', '--output')
-    parser.add_argument('-s', '--substep', action='store_true')
+    parser.add_argument('-s', '--step', action='store_true')
     parser.add_argument('-np', '--no-presentation', action='store_true')
     args = parser.parse_args()
 
@@ -478,10 +484,10 @@ def main():
         f.write(publish_to_html(source).decode('utf-8'))
     print(f'Written: {out}')
 
-    if args.substep:
-        sub = base + '.substep4pdf.html'
+    if args.step:
+        sub = base + '.step4pdf.html'
         with open(sub, 'w', encoding='utf-8') as f:
-            f.write(publish_to_html(source, 'substep').decode('utf-8'))
+            f.write(publish_to_html(source, 'step').decode('utf-8'))
         print(f'Written: {sub}')
 
     if not args.no_presentation:
@@ -491,5 +497,6 @@ def main():
         print(f'Written: {pres}')
 
 
+# ── CLI ──────────────────────────────────────────────────────────────────────
 if __name__ == '__main__':
     main()
