@@ -267,18 +267,6 @@ _CSS_FULLWIDTH = (
 
 _CSS_SUBSTEP_HIDDEN = '<style>.substep-hidden{opacity:0;}</style>'
 
-_CSS_B6PLUS = (
-    '<style>'
-    'body.full .next:not(.active):not(.visited),'
-    'body.full .incremental>*:not(.active):not(.visited),'
-    'body.full .overlay>*:not(.active):not(.visited){visibility:hidden}'
-    'body.full .slide-number{display:none}'
-    'body.full section.slide{padding-bottom:1rem;break-after:auto;background-color:#ffffff;}'
-    '</style>'
-)
-
-
-
 # ── Translators ──────────────────────────────────────────────────────────────
 class SlidoTranslator(HTMLTranslator):
     def __init__(self, document, output_type='standard'):
@@ -377,6 +365,15 @@ class PresentationSlidoTranslator(SlidoTranslator):
                 self.head.append(
                     f'<link rel="stylesheet" href="{css.strip()}" type="text/css" />'
                 )
+        _CSS_B6PLUS = (
+            '<style>'
+            'body.full .next:not(.active):not(.visited),'
+            'body.full .incremental>*:not(.active):not(.visited),'
+            'body.full .overlay>*:not(.active):not(.visited){visibility:hidden}'
+            #'body.full .slide-number{display:none}'
+            'body.full section.slide{padding-bottom:1rem;break-after:auto;background-color:#ffffff;}'
+            '</style>'
+        )
 
         self.head.append(_CSS_FULLWIDTH)
         self.head.append(_CSS_B6PLUS)

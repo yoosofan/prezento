@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Removed**
 
+v1.0.4 (2026-06-08)
+===================
+
+**Fixed**
+
+* Enabled slide numbering by default for presentations utilizing the B6+ framework, eliminating the need for manual workarounds or alternative implementation methods. Special thanks to Bert Bos (W3C), creator and maintainer of B6+, for this excellent suggestion.
+
 v1.0.3 (2026-06-04)
 ===================
 
