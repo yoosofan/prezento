@@ -25,6 +25,7 @@ v1.1.0 (2026-06-10)
 **Added**
 
 * ``komento`` directive — allows private presenter notes (speaker comments) that appear only in the b6plus presentation console.
+* step can be added as class in grafo svg image for step bt step showing parts of corresponding generated svg image.
 
 **Changed**
 
@@ -32,6 +33,7 @@ v1.1.0 (2026-06-10)
   * **Note**: Existing slides using ``.. yographviz::`` must be updated to ``.. grafo::``.
 * Improved title handling in HTML output based on the ``prezento`` directive.
 * Made Pillow (PIL) a required dependency to properly support the ``:scale:``, ``:width:``, and ``:height:`` options on images.
+* Renamed the substep to step
 
 **Fixed**
 
