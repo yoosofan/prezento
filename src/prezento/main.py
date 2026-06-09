@@ -20,6 +20,9 @@ class slido_block(nodes.container):
     pass
 class graphviz_block(nodes.General, nodes.Element):
     pass
+# [ADDED] New custom node for the komento block
+class komento_block(nodes.container):
+    pass
 
 # ── Directives ───────────────────────────────────────────────────────────────
 class PrezentoDirective(Directive):
@@ -119,10 +122,38 @@ class GraphvizDirective(Directive):
             node['svg'] = ''
         return [node]
 
+# [ADDED] New directive class for presenter comments
+class KomentoDirective(Directive):
+    has_content = True
+    optional_arguments = 10
+    final_argument_whitespace = True
+    option_spec = {
+        'class': directives.class_option,
+        'id':    directives.unchanged,
+    }
+
+    def run(self):
+        node = komento_block()
+        if 'class' in self.options:
+            node['classes'] = self.options['class']
+        if 'id' in self.options:
+            node['ids'] = [self.options['id']]
+
+        # Dedent content properly so internal nested elements format correctly
+        text = '\n'.join(self.content)
+        dedented = textwrap.dedent(text)
+        content = self.content.__class__(
+            dedented.splitlines(), source=self.state.document['source']
+        )
+        self.state.nested_parse(content, self.content_offset, node)
+        return [node]
 
 directives.register_directive('prezento', PrezentoDirective)
 directives.register_directive('slido', SlidoDirective)
-directives.register_directive('yographviz', GraphvizDirective)
+# [CHANGED] Renamed from 'yographviz' to 'grafo'
+directives.register_directive('grafo', GraphvizDirective)
+# [ADDED] Registered the new 'komento' directive
+directives.register_directive('komento', KomentoDirective)
 
 # ── Step Helpers ─────────────────────────────────────────────────────────────
 _STEP_CONTAINER_TYPES = (
@@ -277,8 +308,6 @@ class SlidoTranslator(HTMLTranslator):
     def visit_document(self, node):
         super().visit_document(node)
 
-        # [ADDED] Strip out the default <title>&lt;string&gt;</title> that docutils
-        # automatically generates when parsing text buffers, leaving only our custom title.
         self.head = [tag for tag in self.head if not tag.strip().startswith('<title')]
 
         self.head.append(_CSS_FULLWIDTH)
@@ -316,9 +345,17 @@ class SlidoTranslator(HTMLTranslator):
     def depart_slido_block(self, node):
         self.body.append(f'<div class="slide-number">{self.slide_count}</div></section>\n')
 
-    # [REMOVED] The overridden visit_image and depart_image methods have been completely
-    # removed. Because the 'pillow' library is now required, docutils processes the :scale:
-    # attribute natively during build time, removing the need for CSS scaling hacks.
+    # [ADDED] Handler functions to output the new komento_block as a `<section class="comment">`
+    def visit_komento_block(self, node):
+        extra = node.get('classes', [])
+        # Merge our required 'comment' class with any user-supplied classes
+        class_str = ' '.join(['comment'] + extra)
+        id_attr = f' id="{node["ids"][0]}"' if node.get('ids') else ''
+        self.body.append(f'<section class="{class_str}"{id_attr}>\n')
+
+    # [ADDED] Close the section tag when departing the komento_block
+    def depart_komento_block(self, node):
+        self.body.append('</section>\n')
 
     def visit_graphviz_block(self, node):
         align = node.get('align', 'center')
@@ -366,10 +403,6 @@ class PresentationSlidoTranslator(SlidoTranslator):
     def visit_document(self, node):
         SlidoTranslator.visit_document(self, node)
         cfg = self.config
-
-        # [REMOVED] A duplicate code block for appending `<title>{cfg["title"]}</title>`
-        # was removed here because `SlidoTranslator.visit_document(self, node)` already
-        # applies the correct title. This prevents 2 identical titles from appearing.
 
         _B6PLUS_JS_URL = 'assets/b6plus.js'
 
