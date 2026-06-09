@@ -2,9 +2,9 @@
 prezento — Modern RST Slide Generator
 ======================================
 
-**prezento** is a powerful, offline-first slide generator that converts reStructuredText (RST) files into beautiful, interactive HTML presentations.
+**prezento** is an advanced, offline-first slide generator designed to convert standard reStructuredText (RST) documents into highly semantic, interactive HTML presentations and print-ready educational handouts.
 
-It is a complete rewrite of `prezentprogramo` (a former fork of Hovercraft) with modern architecture, improved substep handling, and a switch from impress.js to `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_.
+Born out of the necessity for robust lecture material generation, `prezento` is a complete architectural rewrite of `prezentprogramo` (a historical fork of Hovercraft). It features a modern Python rendering pipeline, a highly engineered incremental-reveal (step) system, and a core transition to the standard-compliant `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_ presentation framework.
 
 .. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
    :target: LICENSE
@@ -15,36 +15,52 @@ It is a complete rewrite of `prezentprogramo` (a former fork of Hovercraft) with
 Features
 ========
 
-* Clean and semantic RST-based slide authoring
-* Powerful **substep / incremental reveal** system with fine-grained control
-* Multiple output formats:
-   * Standard HTML (for direct PDF printing)
-   * Substep-expanded HTML (step-by-step handouts)
-   * b6plus presentation mode (for projectors / live talks)
-* Embedded Graphviz diagram support (`yographviz` directive)
-* Full offline capability
-* Custom CSS and JavaScript support
-* High-quality print/PDF output
+* **Semantic RST Authoring:** Define slides using clean, human-readable structural text without manual HTML/DOM manipulation.
+* **Granular Step-by-Step Expansion:** A mathematically precise AST (Abstract Syntax Tree) unrolling engine that creates perfect frame-by-frame PDF handouts mirroring your live presentation clicks.
+* **Native Graphviz Integration:** Embed complex architecture diagrams directly in your slides using the custom ``grafo`` directive, with automated SVG sanitization and CSS scaling.
+* **Presenter Console Support:** Private speaker notes injected seamlessly into the `b6plus` presenter dashboard via the ``komento`` directive.
+* **Offline-First Architecture:** Zero runtime reliance on external CDNs or APIs. Presentations render flawlessly in air-gapped environments or low-connectivity lecture halls.
+* **Multi-Format Generation:** Simultaneously compiles your single source text into a live presentation, a flat summary document, and a frame-by-frame handout.
 
 Why prezento?
 =============
 
-The original `prezentprogramo` was heavily tied to impress.js and had complex structure. After years of use, I decided to rewrite it from scratch with the following goals:
+The original `prezentprogramo` relied heavily on `impress.js`. While visually impressive, `impress.js` introduced immense structural DOM complexities that made generating clean, static PDF handouts highly problematic. After years of field-testing in university lecture settings, `prezento` was redesigned from scratch to solve these fundamental limitations:
 
-* Better substep semantics for lecture note substeps(Showing content of a page gradually)
-* Modern docutils usage (no deprecated APIs)
-* Cleaner code architecture
-* Switch to **b6plus** — a lightweight and actively maintained presentation library
-* Easier maintenance and future extensibility
-
-This version is **not compatible** with original Hovercraft or prezentprogramo RST files, but it offers a much better authoring experience.
+* **Strict Decoupling:** Complete separation of the static layout generation from the interactive JavaScript presentation layer.
+* **Modernized Docutils Pipeline:** Eradication of legacy Docutils hooks in favor of clean, isolated HTML5 tree translators and native node visiting.
+* **Framework Migration:** Transitioning to **b6plus**, an elegant, lightweight presentation package maintained by the W3C presentation community, which handles progressive reveals (`incremental` classes) and hierarchical lists far more gracefully.
 
 Sample Slides
 =============
 
-You can see real-world examples of prezento in use here:
+Real-world examples of prezento in use are located here:
 
 https://github.com/yoosofan/slide
+
+The following samples shows more details for learning and using prezento.
+
+Sample 1
+--------
+* `rst input source <https://github.com/yoosofan/slide/blob/main/os.paging.rst>`_
+    * `download <http://yoosofan.github.io/slide/os.paging.rst>`_
+* `prezentation output html <https://yoosofan.github.io/slide/os.paging.presentation.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/os.paging.presentation.html>`_
+* `output of concise html for pdf <https://yoosofan.github.io/slide/os.paging.concise4pdf.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/os.paging.concise4pdf.html>`_
+* `output of step html for pdf <https://yoosofan.github.io/slide/os.paging.step4pdf.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/os.paging.step4pdf.html>`_
+
+Sample 2
+--------
+* `rst input source <https://github.com/yoosofan/slide/blob/main/db.sql2.rst>`_
+    * `download <http://yoosofan.github.io/slide/db.sql2.rst>`_
+* `prezentation output html <https://yoosofan.github.io/slide/db.sql2.presentation.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/db.sql2.presentation.html>`_
+* `output of concise html for pdf <https://yoosofan.github.io/slide/db.sql2.concise4pdf.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/db.sql2.concise4pdf.html>`_
+* `output of step html for pdf <https://yoosofan.github.io/slide/db.sql2.step4pdf.html>`_
+    * `download <https://github.com/yoosofan/slide/blob/main/db.sql2.step4pdf.html>`_
 
 Assets Requirement
 ==================
@@ -92,9 +108,103 @@ Options:
 
 .. code-block:: bash
 
-    prezento input.rst -o output.html
+    prezento input.rst -o output4presentation.html
     prezento input.rst -s  # Generate input.substep4pdf.html — Step-by-step version
     prezento input.rst -np # Skip b6plus version for screen presentation
+
+Convert to Pdf
+--------------
+Open `*.concise4pdf.html` output file by any web browser and print it. It would be better if you use landscape and enable background.
+
+
+Output Targets Pipeline
+=======================
+
+A single execution of `prezento` generates up to three distinct structural outputs, tailored for different instructional needs:
+
+1. **Concise Handout Mode (``*.concise4pdf.html``)**
+   Outputs a flattened, continuous HTML document. All animation states and incremental steps are fully visible immediately. This is optimized for quick student reference, screen readers, or standard single-pass PDF printing.
+
+2. **Step Handout Mode (``*.step4pdf.html``)**
+   Powered by a custom AST deep-cloning engine. If a slide contains progressive steps, the engine clones the slide node entirely for each step, altering the visibility classes sequentially. This produces a long-form HTML file that, when printed to PDF, acts as a perfect flip-book mimicking the exact timing and progression of the live lecture.
+
+3. **Interactive Presentation Mode (``*.presentation.html``)**
+   The dynamic projector mode. It automatically maps your logical slide boundaries and step flags into `b6plus` native classes (like ``incremental``) and injects the necessary CSS/JS routing for live speaker delivery.
+
+Syntax and File Structure
+=========================
+
+Presentations are written as standard `.rst` files. The document must begin with the ``prezento`` directive to establish global metadata, followed by four-space indented ``slido`` blocks.
+
+.. code:: rst
+
+    .. prezento:: Advanced Memory Management (By Dr. Turing)
+       :css: assets/theme.css
+       :js: assets/custom_interactions.js
+
+    .. slido:: Introduction to Paging
+       :id: slide-paging-intro
+
+       Paging eliminates external fragmentation by dividing physical memory into fixed-sized blocks.
+
+       * Block size is defined by the hardware.
+       * Typical sizes range from 4 KB to 8 KB.
+
+    .. slido:: The Translation Look-aside Buffer (TLB)
+       :class: custom-slide-bg
+
+       The TLB is a specialized hardware cache for page table entries.
+
+       #. CPU generates a logical address.
+       #. The page number is sent to the TLB.
+       #. If a **TLB Hit** occurs, the frame is returned immediately.
+       #. If a **TLB Miss** occurs, a memory access is required.
+
+Custom Directives Reference
+===========================
+
+`prezento` extends docutils with presentation-specific domain hooks:
+
+``slido``
+---------
+Defines a hard boundary for a new slide. All content belonging to the slide must be indented by exactly four spaces.
+
+* **Options:**
+    * ``:id:`` Binds an explicit HTML ID to the slide section.
+    * ``:class:`` Applies custom CSS classes to the slide container.
+    * ``:step:`` A boolean flag. When present, it instructs the engine to treat child elements (like list items) as progressive incremental steps.
+
+``grafo``
+---------
+Embeds vector diagrams via Graphviz DOT syntax. The engine captures the output, sanitizes the XML, and embeds it directly as an inline `<svg>`.
+* **Features:** It safely catches the ``:scale:`` attribute and translates it into native CSS transforms (``transform: scale(...)``) to prevent Docutils from attempting to use external image libraries. It also automatically rewrites internal ``step`` classes to ``incremental`` to allow diagram elements to appear step-by-step in `b6plus`.
+
+.. code:: rst
+
+    .. grafo::
+       :align: center
+       :scale: 120
+
+       digraph G {
+           node [shape=box];
+           "Logical Address" -> "Page Table" [class="step"];
+           "Page Table" -> "Physical Memory" [class="step"];
+       }
+
+``komento``
+-----------
+Establishes a private presenter notes block. During the rendering of the ``presentation.html`` target, content inside this directive is wrapped in a ``<section class="comment">``. The `b6plus` engine automatically detects this class, hiding the content from the main projector view while displaying it clearly on the speaker's private control monitor.
+
+.. code:: rst
+
+    .. slido:: Addressing Hardware
+
+       * Page Offset (d)
+       * Page Number (p)
+
+       .. komento::
+
+          Make sure to write the formula "m - n" on the whiteboard before switching to the next slide.
 
 Project Structure (Development)
 ===============================
@@ -105,41 +215,37 @@ Project Structure (Development)
     ├── src/
     │   └── prezento/
     │       ├── __init__.py
-    │       └── main.py
+    │       └── main.py     # Core translation pipeline & CLI entry point
     ├── docs/
-    │   └── CHANGELOG.rst
+    │   └── CHANGELOG.rst   # Version history and migration notes
     └── tools/
         ├── readme.rst
-        ├── slido_ls.py
-        ├── build.sh
-        └── clean.sh
+        ├── slido_ls.py     # Language Server Protocol (LSP) for IDEs and editors
+        ├── build.sh        # Packaging and deployment script
+        └── clean.sh        # Environment scrub utility
 
 Contributing
 ============
 
-Contributions are welcome! This project is still in active development.
+Contributions from the educational and open-source communities are highly encouraged. As the project remains in active development, you can assist by:
 
-If you want to help, please:
-
-* Open an issue for bugs or feature requests
-* Submit pull requests for improvements
-* Test with complex slide decks
+* Opening detailed issues for rendering bugs or feature requests.
+* Submitting Pull Requests to enhance the HTML5 translator logic or add new directive capabilities.
+* Testing the pipeline against massive, highly complex academic slide decks to identify edge-case layout breaks.
 
 License
 =======
 
 This project is licensed under the **GNU General Public License v3.0** (GPLv3).
 
-See the `LICENSE` file for the full license text.
-
-You are free to use, modify, and distribute this software under the terms of GPLv3.
+See the ``LICENSE`` file in the repository root for the full legal text. You are free to use, modify, and distribute this software strictly under the terms of this license.
 
 Acknowledgments
 ===============
 
-* Inspired by `Hovercraft <https://github.com/regebro/hovercraft>`_ and the original `prezentprogramo <https://github.com/yoosofan/prezentprogramo>`_
-* Uses `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_ for presentation mode. https://www.w3.org/Talks/Tools/b6plus/slides.zip
-* Built on top of `docutils <https://docutils.sourceforge.io/>`_
+* Architecture heavily inspired by `Hovercraft <https://github.com/regebro/hovercraft>`_ and the historical framework of `prezentprogramo <https://github.com/yoosofan/prezentprogramo>`_.
+* Interactive projector routing powered entirely by the excellent `b6plus <https://www.w3.org/Talks/Tools/b6plus/>`_ framework.
+* Structural tree manipulation built on top of the robust Python `docutils <https://docutils.sourceforge.io/>`_ engine.
 
 Author
 ======

@@ -18,6 +18,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Removed**
 
+
+v1.1.0 (2026-06-10)
+===================
+
+**Added**
+
+* ``komento`` directive — allows private presenter notes (speaker comments) that appear only in the b6plus presentation console.
+
+**Changed**
+
+* Renamed the Graphviz directive from ``yographviz`` to ``grafo`` (more intuitive and shorter name).
+  * **Note**: Existing slides using ``.. yographviz::`` must be updated to ``.. grafo::``.
+* Improved title handling in HTML output based on the ``prezento`` directive.
+* Made Pillow (PIL) a required dependency to properly support the ``:scale:``, ``:width:``, and ``:height:`` options on images.
+
+**Fixed**
+
+* Various docutils settings issues that caused crashes when using image scaling attributes.
+* Better handling of substep expansion for PDF handouts.
+* Minor CSS and HTML structure improvements for cleaner output.
+
+**Removed**
+
+* Legacy CSS transformations that were previously needed as a workaround for image scaling.
+
 v1.0.4 (2026-06-08)
 ===================
 

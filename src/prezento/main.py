@@ -91,11 +91,16 @@ class GraphvizDirective(Directive):
     def run(self):
         node = graphviz_block()
 
-        if 'class' in self.options: node['classes'] = self.options['class']
-        if 'align' in self.options: node['align'] = self.options['align']
-        if 'width' in self.options: node['width'] = self.options['width']
-        if 'height' in self.options: node['height'] = self.options['height']
-        if 'scale' in self.options: node['scale'] = self.options['scale']
+        if 'class' in self.options:
+            node['classes'] = self.options['class']
+        if 'align' in self.options:
+            node['align'] = self.options['align']
+        if 'width' in self.options:
+            node['width'] = self.options['width']
+        if 'height' in self.options:
+            node['height'] = self.options['height']
+        if 'scale' in self.options:
+            node['scale'] = self.options['scale']
 
         dot_code = '\n'.join(self.content)
         try:
