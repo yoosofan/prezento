@@ -77,7 +77,7 @@ The primary scope of this tool is focused on generating a clean, accurate symbol
 Geany IDE (via geany-lsp)
 `````````````````````````
 
-Geany is a lightweight, high-performance IDE that supports the Language Server Protocol through the official `Geany Plugins <https://geany.org>`_ ecosystem using the ``geany-lsp`` module.
+Geany is a lightweight, high-performance IDE that supports the Language Server Protocol through the official `Geany Plugins <https://plugins.geany.org/lsp.html>`_ ecosystem using the ``geany-lsp`` module.
 
 Unlike other modern text editors that rely heavily on JSON configurations, Geany parses its custom language client parameters using a standardized INI configuration syntax (``lsp.conf``).
 
