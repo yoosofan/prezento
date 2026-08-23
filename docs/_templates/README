@@ -1,0 +1,2 @@
+Sphinx custom templates (optional). Left empty so conf.py's
+templates_path = ["_templates"] resolves.

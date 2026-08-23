@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Making presentations &mdash; prezento documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=0a5f7697" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.svg"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=58fbf978"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Custom directives" href="directives.html" />
+    <link rel="prev" title="Using prezento" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            prezento
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#why-text-based-slides">Why text-based slides?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#why-not-hovercraft-or-impress-js">Why not Hovercraft! or impress.js?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#design-goals">Design goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-prezento-is-not">What prezento is not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#relationship-to-other-projects">Relationship to other projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-source">Install from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#graphviz-system-package">Graphviz system package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#b6plus-runtime-asset">b6plus runtime asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-install">Verify the install</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using prezento</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#basic-invocation">Basic invocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#command-line">Command line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#positional-arguments">Positional arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#optional-arguments">Optional arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#convert-to-pdf">Convert to PDF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#typical-lecture-workflow">Typical lecture workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Making presentations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-note-on-terminology">A note on terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-structure">File structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#indentation">Indentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#restructuredtext-you-already-know">reStructuredText you already know</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#incremental-reveals-steps">Incremental reveals (steps)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-is-compiled">How it is compiled</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#presenter-notes">Presenter notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#external-files">External files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-javascript">Adding JavaScript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#portable-presentations">Portable presentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-convention-slide-repository">Naming convention (slide repository)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="directives.html">Custom directives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#prezento"><code class="docutils literal notranslate"><span class="pre">prezento</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#slido"><code class="docutils literal notranslate"><span class="pre">slido</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="directives.html#empty-title">Empty title</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#grafo"><code class="docutils literal notranslate"><span class="pre">grafo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#komento"><code class="docutils literal notranslate"><span class="pre">komento</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#standard-docutils-directives">Standard docutils directives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directives.html#migration-notes">Migration notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="outputs.html">Output targets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#concise-handout-concise4pdf-html">Concise handout (<code class="docutils literal notranslate"><span class="pre">*.concise4pdf.html</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#step-handout-step4pdf-html">Step handout (<code class="docutils literal notranslate"><span class="pre">*.step4pdf.html</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#interactive-presentation-presentation-html">Interactive presentation (<code class="docutils literal notranslate"><span class="pre">*.presentation.html</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="outputs.html#keyboard-b6plus">Keyboard (b6plus)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#standalone-folder-d-outdir">Standalone folder (<code class="docutils literal notranslate"><span class="pre">-d</span></code> / <code class="docutils literal notranslate"><span class="pre">--outdir</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#html-structure-presentation">HTML structure (presentation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outputs.html#css-injected-by-prezento">CSS injected by prezento</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="styling.html">Styling presentations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#include-your-own-css">Include your own CSS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#adding-javascript">Adding JavaScript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#per-slide-classes">Per-slide classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#layout-helpers-used-in-the-sample-decks">Layout helpers used in the sample decks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#images">Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#graphviz-sizing">Graphviz sizing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#custom-fonts">Custom fonts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#print">Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#b6plus-visual-hooks">b6plus visual hooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html#design-advice">Design advice</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Editor tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#language-server-slido-ls-py">Language server (<code class="docutils literal notranslate"><span class="pre">slido_ls.py</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#behaviour">Behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#why-not-esbonio">Why not Esbonio?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#kate">Kate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#neovim">Neovim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#geany">Geany</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#visual-studio-code">Visual Studio Code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#helper-scripts">Helper scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#companion-repository">Companion repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sample-1-operating-systems-paging">Sample 1 — Operating Systems: Paging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sample-2-databases-sql-part-2">Sample 2 — Databases: SQL (part 2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#minimal-skeleton">Minimal skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#migrating-from-hovercraft-prezentprogramo">Migrating from Hovercraft / prezentprogramo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-rst2html-work-without-pillow-but-prezento-needs-it">Why does <code class="docutils literal notranslate"><span class="pre">rst2html</span></code> work without Pillow, but prezento needs it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-esbonio-fail-on-my-lecture-rst-files">Why does Esbonio fail on my lecture <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-the-geany-symbols-sidebar-empty">Why is the Geany symbols sidebar empty?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#the-presentation-html-is-blank-keys-do-nothing">The presentation HTML is blank / keys do nothing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#yographviz-does-nothing"><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">yographviz::</span></code> does nothing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-happened-to-substep">What happened to <code class="docutils literal notranslate"><span class="pre">substep</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-get-a-pdf">How do I get a PDF?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#can-i-still-use-hovercraft-positioning-data-x-svg-paths">Can I still use Hovercraft positioning (<code class="docutils literal notranslate"><span class="pre">:data-x:</span></code>, SVG paths)?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#does-outdir-honour-s-np">Does <code class="docutils literal notranslate"><span class="pre">--outdir</span></code> honour <code class="docutils literal notranslate"><span class="pre">-s</span></code> / <code class="docutils literal notranslate"><span class="pre">-np</span></code>?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#repository">Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#project-layout">Project layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#where-to-patch">Where to patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-install">Development install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#building-this-documentation">Building this documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2026-06-30">v1.1.1 (2026-06-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2026-06-10">v1.1.0 (2026-06-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2026-06-08">v1.0.4 (2026-06-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2026-06-04">v1.0.3 (2026-06-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2026-05-31">v1.0.1 (2026-05-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2026-05-30">v1.0.0 (2026-05-30)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">prezento</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Making presentations</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/yoosofan/prezento/blob/main/docs/presentations.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="making-presentations">
+<h1>Making presentations<a class="headerlink" href="#making-presentations" title="Link to this heading"></a></h1>
+<section id="a-note-on-terminology">
+<h2>A note on terminology<a class="headerlink" href="#a-note-on-terminology" title="Link to this heading"></a></h2>
+<p>Hovercraft and impress.js use <em>slide</em> and <em>step</em> almost interchangeably.
+prezento keeps them distinct:</p>
+<ul class="simple">
+<li><p>A <strong>slide</strong> is one <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">slido::</span></code> block — one projector page.</p></li>
+<li><p>A <strong>step</strong> (formerly <em>substep</em>) is an incremental reveal <em>inside</em> a
+slide. In the source you mark it with <code class="docutils literal notranslate"><span class="pre">:class:</span> <span class="pre">step</span></code>, or with the
+<code class="docutils literal notranslate"><span class="pre">:step:</span></code> flag on the <code class="docutils literal notranslate"><span class="pre">slido</span></code>. In b6plus output this becomes the
+<code class="docutils literal notranslate"><span class="pre">incremental</span></code> class.</p></li>
+</ul>
+</section>
+<section id="file-structure">
+<h2>File structure<a class="headerlink" href="#file-structure" title="Link to this heading"></a></h2>
+<p>A presentation is a normal <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file. It <strong>must</strong> start with the
+<code class="docutils literal notranslate"><span class="pre">prezento</span></code> directive (global metadata), then one or more four-space
+indented <code class="docutils literal notranslate"><span class="pre">slido</span></code> blocks.</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">prezento</span><span class="p">::</span> Operating Systems — Paging (By Ahmad Yoosofan)
+   <span class="nc">:css:</span> ./assets/style.css
+
+<span class="p">..</span> <span class="ow">slido</span><span class="p">::</span> Introduction to Paging
+   <span class="nc">:id:</span> slide-paging-intro
+
+   Paging eliminates external fragmentation by dividing physical
+   memory into fixed-size <span class="gs">**frames**</span>.
+
+   <span class="m">*</span> Page size equals frame size.
+   <span class="m">*</span> The OS tracks free frames.
+
+<span class="p">..</span> <span class="ow">slido</span><span class="p">::</span> The TLB
+   <span class="nc">:class:</span> t2c
+
+   The TLB caches recent virtual-to-physical translations.
+
+   <span class="m">#.</span> CPU generates a logical address.
+   <span class="m">#.</span> The page number is looked up in the TLB.
+   <span class="m">#.</span> A <span class="gs">**hit**</span> returns the frame immediately.
+   <span class="m">#.</span> A <span class="gs">**miss**</span> walks the page table in RAM.
+</pre></div>
+</div>
+<section id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Link to this heading"></a></h3>
+<p>All content that belongs to a slide must be indented (conventionally
+four spaces) under <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">slido::</span></code>. Unindented material is not part of
+that slide.</p>
+<p>This is the main syntactic difference from Hovercraft, which uses a
+transition marker (<code class="docutils literal notranslate"><span class="pre">----</span></code>) between heading-delimited slides.</p>
+</section>
+</section>
+<section id="restructuredtext-you-already-know">
+<h2>reStructuredText you already know<a class="headerlink" href="#restructuredtext-you-already-know" title="Link to this heading"></a></h2>
+<p>Headings, emphasis, lists, tables, images, math, and code work as in
+any RST document.</p>
+<p><strong>Emphasis</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">italic</span><span class="o">*</span> <span class="ow">and</span> <span class="o">**</span><span class="n">bold</span><span class="o">**</span>
+</pre></div>
+</div>
+<p><strong>Bullet and numbered lists</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">Frame</span>
+<span class="o">*</span> <span class="n">Page</span>
+
+<span class="c1">#. Translate</span>
+<span class="c1">#. Access memory</span>
+</pre></div>
+</div>
+<p><strong>Images</strong> (Pillow is required for <code class="docutils literal notranslate"><span class="pre">:scale:</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">image</span><span class="p">::</span> <span class="n">os</span><span class="o">/</span><span class="n">img</span><span class="o">/</span><span class="n">memory</span><span class="o">/</span><span class="n">paging_model</span><span class="o">.</span><span class="n">png</span>
+   <span class="p">:</span><span class="n">align</span><span class="p">:</span> <span class="n">center</span>
+   <span class="p">:</span><span class="n">scale</span><span class="p">:</span> <span class="mi">110</span><span class="o">%</span>
+   <span class="p">:</span><span class="n">height</span><span class="p">:</span> <span class="mi">300</span><span class="n">px</span>
+</pre></div>
+</div>
+<p><strong>Math</strong> (docutils math; style with CSS / MathJax in your theme):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">math</span><span class="p">::</span>
+
+   <span class="n">EAT</span> <span class="o">=</span> <span class="n">h</span> \<span class="n">times</span> <span class="p">(</span><span class="n">t_</span><span class="p">{</span><span class="n">TLB</span><span class="p">}</span> <span class="o">+</span> <span class="n">t_</span><span class="p">{</span><span class="n">mem</span><span class="p">})</span>
+       <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">h</span><span class="p">)</span> \<span class="n">times</span> <span class="p">(</span><span class="n">t_</span><span class="p">{</span><span class="n">TLB</span><span class="p">}</span> <span class="o">+</span> <span class="mi">2</span> <span class="n">t_</span><span class="p">{</span><span class="n">mem</span><span class="p">})</span>
+</pre></div>
+</div>
+<p><strong>Code</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="p">::</span> <span class="n">python</span>
+
+   <span class="k">def</span><span class="w"> </span><span class="nf">physical</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+       <span class="k">return</span> <span class="p">(</span><span class="n">frame</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">|</span> <span class="n">offset</span>
+</pre></div>
+</div>
+<p><strong>CSV tables</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">csv</span><span class="o">-</span><span class="n">table</span><span class="p">::</span>
+   <span class="p">:</span><span class="n">header</span><span class="o">-</span><span class="n">rows</span><span class="p">:</span> <span class="mi">1</span>
+
+   <span class="n">page</span><span class="p">,</span><span class="n">frame</span>
+   <span class="mi">0</span><span class="p">,</span><span class="mi">2</span>
+   <span class="mi">1</span><span class="p">,</span><span class="mi">5</span>
+</pre></div>
+</div>
+<p>Roles such as <code class="docutils literal notranslate"><span class="pre">:math:</span></code>, custom <code class="docutils literal notranslate"><span class="pre">:rtl:</span></code> / <code class="docutils literal notranslate"><span class="pre">:ltr:</span></code> (if you define
+them), and standard hyperlinks are passed through to HTML.</p>
+</section>
+<section id="incremental-reveals-steps">
+<h2>Incremental reveals (steps)<a class="headerlink" href="#incremental-reveals-steps" title="Link to this heading"></a></h2>
+<p>Mark a container or an element with class <code class="docutils literal notranslate"><span class="pre">step</span></code>.</p>
+<p>Reveal a whole list item by item:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">slido</span><span class="p">::</span> Address bits
+
+<span class="p">   ..</span> <span class="ow">class</span><span class="p">::</span> step
+
+      <span class="m">#.</span> Address width = log2(maximum memory)
+      <span class="m">#.</span> Offset bits <span class="ge">*d*</span> = log2(page size)
+      <span class="m">#.</span> Page bits <span class="ge">*p*</span> = address width − <span class="ge">*d*</span>
+</pre></div>
+</div>
+<p>Reveal a math block after the setup text:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">class</span><span class="p">::</span> step
+
+   <span class="m">*</span> <span class="na">:math:</span><span class="nv">`t_t = 1`</span> ns, <span class="na">:math:</span><span class="nv">`h_t = 0.95`</span>
+
+<span class="p">..</span> <span class="ow">math</span><span class="p">::</span>
+   <span class="nc">:class:</span> step
+
+   table = 0.95 \times 1 + 0.05 \times 101 = 6
+</pre></div>
+</div>
+<p>On a <code class="docutils literal notranslate"><span class="pre">slido</span></code> that itself has the <code class="docutils literal notranslate"><span class="pre">:step:</span></code> flag (or class <code class="docutils literal notranslate"><span class="pre">step</span></code>),
+each child of the slide (except titles) is treated as a successive
+incremental.</p>
+<section id="how-it-is-compiled">
+<h3>How it is compiled<a class="headerlink" href="#how-it-is-compiled" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Presentation HTML</strong> — <code class="docutils literal notranslate"><span class="pre">_b6_transform</span></code> maps <code class="docutils literal notranslate"><span class="pre">step</span></code> to b6plus
+<code class="docutils literal notranslate"><span class="pre">incremental</span></code>. During the talk, Space / → reveals the next child.</p></li>
+<li><p><strong>Step HTML</strong> (<code class="docutils literal notranslate"><span class="pre">-s</span></code>) — the AST is cloned once per reveal index.
+Later items get <code class="docutils literal notranslate"><span class="pre">substep-hidden</span></code> so each printed page matches one
+click.</p></li>
+<li><p><strong>Concise HTML</strong> — every item is visible; classes used only for
+styling.</p></li>
+</ul>
+</section>
+</section>
+<section id="presenter-notes">
+<h2>Presenter notes<a class="headerlink" href="#presenter-notes" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">komento</span></code> (Esperanto for <em>comment</em>). Notes are wrapped as
+<code class="docutils literal notranslate"><span class="pre">&lt;section</span> <span class="pre">class=&quot;comment&quot;&gt;</span></code> in the presentation target. b6plus hides
+them on the projector and shows them in the second window (press
+<code class="docutils literal notranslate"><span class="pre">2</span></code>).</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">slido</span><span class="p">::</span> Addressing Hardware
+
+   <span class="m">*</span> Page offset (d)
+   <span class="m">*</span> Page number (p)
+
+<span class="p">   ..</span> <span class="ow">komento</span><span class="p">::</span>
+
+      Write the formula <span class="ge">*m − n*</span> on the board before the next slide.
+</pre></div>
+</div>
+<p>This replaces Hovercraft’s <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">note::</span></code> for speaker notes. The
+standard docutils <code class="docutils literal notranslate"><span class="pre">note</span></code> admonition is left alone (it still renders
+as a visible note box).</p>
+</section>
+<section id="external-files">
+<h2>External files<a class="headerlink" href="#external-files" title="Link to this heading"></a></h2>
+<p>Images referenced by relative path should sit next to the RST (or in a
+subdirectory). With <code class="docutils literal notranslate"><span class="pre">--outdir</span></code>, prezento copies local images, CSS, JS,
+and <code class="docutils literal notranslate"><span class="pre">b6plus.js</span></code> it can discover into the output folder.</p>
+<p>Absolute URLs are left as-is and are <strong>not</strong> copied.</p>
+</section>
+<section id="adding-javascript">
+<h2>Adding JavaScript<a class="headerlink" href="#adding-javascript" title="Link to this heading"></a></h2>
+<p>Pass scripts in the <code class="docutils literal notranslate"><span class="pre">prezento</span></code> directive:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">prezento</span><span class="p">::</span> Course title
+   <span class="nc">:css:</span> ./assets/style.css
+   <span class="nc">:js:</span> ./assets/custom.js, ./assets/mathjax/tex-chtml.js
+</pre></div>
+</div>
+<p>Each path becomes a <code class="docutils literal notranslate"><span class="pre">&lt;script</span> <span class="pre">src&gt;</span></code> in the generated HTML. There is no
+separate header/body split (Hovercraft’s <code class="docutils literal notranslate"><span class="pre">:js-header:</span></code> / <code class="docutils literal notranslate"><span class="pre">:js-body:</span></code>).
+Keep scripts local for air-gapped halls.</p>
+</section>
+<section id="portable-presentations">
+<h2>Portable presentations<a class="headerlink" href="#portable-presentations" title="Link to this heading"></a></h2>
+<p>Generated HTML is ordinary HTML5. Any modern browser can show it —
+including a borrowed conference laptop — <strong>if</strong> the assets travel with
+the files.</p>
+<p>The reliable way to pack a lecture is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">prezento</span> <span class="n">os</span><span class="o">.</span><span class="n">paging</span><span class="o">.</span><span class="n">rst</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">d</span> <span class="n">dist</span><span class="o">/</span><span class="n">os</span><span class="o">-</span><span class="n">paging</span>
+</pre></div>
+</div>
+<p>That folder contains <code class="docutils literal notranslate"><span class="pre">index.html</span></code> (the projector deck), the concise
+handout, copied local resources, and <code class="docutils literal notranslate"><span class="pre">list_of_resources.rst</span></code>. Copy the
+folder to a USB stick. Do not rely on Google Fonts or a CDN.</p>
+<p>For fonts, define <code class="docutils literal notranslate"><span class="pre">&#64;font-face</span></code> in your CSS and keep the font files
+under <code class="docutils literal notranslate"><span class="pre">assets/fonts/</span></code>. See <a class="reference internal" href="styling.html"><span class="doc">Styling presentations</span></a>.</p>
+</section>
+<section id="naming-convention-slide-repository">
+<h2>Naming convention (slide repository)<a class="headerlink" href="#naming-convention-slide-repository" title="Link to this heading"></a></h2>
+<p>In <a class="reference external" href="https://github.com/yoosofan/slide">https://github.com/yoosofan/slide</a> new decks live at the repository
+root as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">course_abbreviation</span><span class="o">&gt;.&lt;</span><span class="n">topic</span><span class="o">&gt;.</span><span class="n">rst</span>
+</pre></div>
+</div>
+<p>Examples: <code class="docutils literal notranslate"><span class="pre">os.paging.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">db.sql2.rst</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Using prezento" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="directives.html" class="btn btn-neutral float-right" title="Custom directives" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Ahmad Yoosofan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

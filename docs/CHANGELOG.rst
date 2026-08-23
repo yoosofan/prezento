@@ -1,14 +1,15 @@
-================================
-CHANGELOG for prezento
-================================
+Changelog
+=========
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format follows `Keep a Changelog <https://keepachangelog.com/en/1.1.0/>`_.
+The project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[Unreleased]
-============
+The canonical file in the GitHub repository is ``docs/CHANGELOG.rst``.
+
+Unreleased
+----------
 
 **Added**
 
@@ -19,109 +20,99 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Removed**
 
 v1.1.1 (2026-06-30)
-===================
+-------------------
 
-* New CLI flag: `-d`/`--outdir DIR`
-
+* New CLI flag: ``-d`` / ``--outdir DIR`` for a self-contained output
+  folder (copied resources, ``index.html``, resource manifest).
 
 v1.1.0 (2026-06-10)
-===================
+-------------------
 
 **Added**
 
-* ``komento`` directive — allows private presenter notes (speaker comments) that appear only in the b6plus presentation console.
-* step can be added as class in grafo svg image for step bt step showing parts of corresponding generated svg image.
+* ``komento`` directive — private presenter notes for the b6plus
+  console (``section.comment``).
+* ``step`` class on ``grafo`` SVG so parts of a diagram can appear
+  incrementally.
 
 **Changed**
 
-* Renamed the Graphviz directive from ``yographviz`` to ``grafo`` (more intuitive and shorter name).
-  * **Note**: Existing slides using ``.. yographviz::`` must be updated to ``.. grafo::``.
-* Improved title handling in HTML output based on the ``prezento`` directive.
-* Made Pillow (PIL) a required dependency to properly support the ``:scale:``, ``:width:``, and ``:height:`` options on images.
-* Renamed the substep to step
+* Renamed the Graphviz directive from ``yographviz`` to ``grafo``.
+  Existing slides using ``.. yographviz::`` **must** be updated.
+* Improved HTML ``<title>`` handling from the ``prezento`` directive.
+* Pillow is a required dependency so image ``:scale:`` / ``:width:`` /
+  ``:height:`` work.
+* Renamed the reveal concept from *substep* to *step*.
 
 **Fixed**
 
-* Various docutils settings issues that caused crashes when using image scaling attributes.
-* Better handling of substep expansion for PDF handouts.
-* Minor CSS and HTML structure improvements for cleaner output.
+* docutils settings crashes when scaling images.
+* Step expansion for PDF handouts.
+* Minor CSS / HTML structure.
 
 **Removed**
 
-* Legacy CSS transformations that were previously needed as a workaround for image scaling.
+* Legacy CSS transforms that existed only as an image-scaling
+  workaround.
 
 v1.0.4 (2026-06-08)
-===================
+-------------------
 
 **Fixed**
 
-* Enabled slide numbering by default for presentations utilizing the B6+ framework, eliminating the need for manual workarounds or alternative implementation methods. Special thanks to Bert Bos (W3C), creator and maintainer of B6+, for this excellent suggestion.
+* Slide numbering on by default for b6plus presentations. Thanks to
+  Bert Bos (W3C), author of b6plus, for the suggestion.
 
 v1.0.3 (2026-06-04)
-===================
+-------------------
 
 **Added**
 
-* asstes folder added to the tools folder of the repository for reference
-* `slido_ls.py` LSP server add to help Kate/Geany IDE to show symbols of `slido`
+* Reference ``assets`` folder under ``tools/``.
+* ``slido_ls.py`` LSP server so Kate/Geany can list ``slido`` symbols.
 
 **Fixed**
 
-* scale attribute for image directive is added
-* pillow is added to the package dependencies
+* ``:scale:`` on the standard ``image`` directive.
+* Pillow added to package dependencies.
 
 **Removed**
 
-* tools/rst2tags4geany.py
+* ``tools/rst2tags4geany.py``
 
 v1.0.1 (2026-05-31)
-===================
+-------------------
 
 **Changed**
 
-* Renamed output files for better clarity:
-    - ``*.concise4pdf.html`` → ``*.html`` (standard version)
-    - ``*.substep4pdf.html`` → ``*.substep.pdf.html``
-* Improved README.rst and project documentation
-* Minor code cleanup and bug fixes
+* Output filenames were renamed in this intermediate release
+  (``*.html``, ``*.substep.pdf.html``). Current code (v1.1.x) again uses
+  ``*.concise4pdf.html``, ``*.step4pdf.html``, and
+  ``*.presentation.html``.
+* README and documentation improvements.
 
 **Added**
 
-* Better error handling and user feedback in CLI
-
+* Better CLI error handling.
 
 v1.0.0 (2026-05-30)
-===================
+-------------------
 
-**Initial Release**
+First official release of **prezento**, a rewrite of
+``prezentprogramo``.
 
-This is the first official release of **prezento** — a modern rewrite of the previous `prezentprogramo` tool.
+**Major features**
 
-**Major Features**
+* Modern docutils (no deprecated APIs)
+* ``.. slido::`` (replacing old ``.. slide::``)
+* Reveal system via ``:class: substep`` (now ``step``)
+* Three output modes: concise HTML, step-expanded HTML, b6plus
+  presentation
+* ``yographviz`` (now ``grafo``) for Graphviz
+* ``src/`` packaging layout
+* Custom CSS and JavaScript
 
-* Full support for modern docutils (no deprecated APIs)
-* New ``.. slido::`` directive (replacing old ``.. slide::``)
-* Powerful and flexible **substep** system using ``:class: substep``
-* Three output modes:
-    * Standard HTML (for PDF printing)
-    * Substep-expanded HTML (step-by-step handouts)
-    * b6plus presentation mode (interactive slides)
-* ``yographviz`` directive for embedded Graphviz diagrams
-* Proper package structure using ``src/`` layout
-* Support for custom CSS and JavaScript
+**Technical**
 
-**Technical Improvements**
-
-* Switched from impress.js to **b6plus**
-* Cleaner architecture and better code organization
-* Migration tools for old slides
-* Proper asset handling (``assets/`` folder)
-
-**Project Structure**
-
-* Adopted modern Python packaging standards (`pyproject.toml` + `src/` layout)
-* Added comprehensive README.rst and documentation
-
-**License**
-
-* Changed to **GPLv3**
+* impress.js → **b6plus**
+* GPLv3

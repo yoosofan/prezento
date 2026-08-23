@@ -1,0 +1,10 @@
+/* Optional extras for sphinx_rtd_theme when building with Sphinx. */
+.wy-side-nav-search {
+  background-color: #0f3d4c;
+}
+.wy-nav-top {
+  background-color: #0f3d4c;
+}
+.wy-menu-vertical a:hover {
+  background-color: #1b2838;
+}
