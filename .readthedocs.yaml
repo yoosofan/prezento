@@ -28,6 +28,10 @@ sphinx:
 #    install:
 #    - requirements: docs/requirements.txt
 
+formats:
+  - pdf
+  - epub
+
 python:
   install:
     - method: pip
